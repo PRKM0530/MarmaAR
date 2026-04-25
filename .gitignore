@@ -1,0 +1,22 @@
+# ── System files ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ── Editor ────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.code-workspace
+
+# ── Node (if you add a build step later) ─────────────────────────
+node_modules/
+npm-debug.log
+
+# ── Secrets ───────────────────────────────────────────────────────
+.env
+.env.local
+
+# NOTE: models/pose_landmarker_lite.task IS committed to this repo.
+# It ships with the project so the app works offline immediately
+# without users needing to run any download scripts.
