@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rich dark charcoal background -->
+  <rect width="512" height="512" fill="#1C1B1A" />
+
+  <!-- Stylized, clean, geometric white outline of a human figure -->
+  <g stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Head Outline: Slightly less thick/bulky -->
+    <circle cx="256" cy="110" r="30" />
+
+    <!-- Torso / Spine -->
+    <line x1="256" y1="140" x2="256" y2="350" />
+
+    <!-- Arms: Clean geometric raised curves -->
+    <path d="M 120 230 C 180 180 332 180 392 230" />
+
+    <!-- Legs: Clean minimalist posture ending at feet -->
+    <path d="M 150 460 L 256 350 L 362 460" />
+  </g>
+
+  <!-- Distinct, flat-colored circular nodes placed exactly on the figure using documentation color standards -->
+  <g stroke="#1C1B1A" stroke-width="6">
+    <!-- Red node at the head -->
+    <circle cx="256" cy="110" r="16" fill="#ff2d2d" />
+
+    <!-- Orange node at the center of the chest (midpoint of hands intersection and legs intersection) -->
+    <circle cx="256" cy="271" r="16" fill="#ff8c00" />
+
+    <!-- Yellow nodes at the hands -->
+    <circle cx="120" cy="230" r="16" fill="#e8e800" />
+    <circle cx="392" cy="230" r="16" fill="#e8e800" />
+
+    <!-- Green nodes exactly at the feet -->
+    <circle cx="150" cy="460" r="16" fill="#00e040" />
+    <circle cx="362" cy="460" r="16" fill="#00e040" />
+  </g>
+</svg>
