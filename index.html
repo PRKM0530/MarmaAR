@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="MarmaAR: Biometrically Scaled AR Mapping of 107 Ayurvedic Marma Points with 3D Pose Estimation." />
+  <meta name="theme-color" content="#FAF9F6" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="MarmaAR" />
+  <title>MarmaAR - Marma Point Directory</title>
+
+  <!-- PWA manifest + icons -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- ── NAVIGATION ─────────────────────────────────────────── -->
+  <header class="site-header" role="banner">
+    <nav class="nav-inner" aria-label="Primary navigation">
+      <a href="index.html" class="logo" aria-label="MarmaAR home">
+        <span class="logo-serif">Marma</span><span class="logo-sans">AR</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#directory" class="nav-link">Directory</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+      </ul>
+      <a href="ar.html" class="btn btn-primary" id="nav-launch-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- Lucide `scan` icon -->
+          <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+          <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+          <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+          <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+          <line x1="7" y1="12" x2="17" y2="12" />
+        </svg>
+        Launch AR
+      </a>
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+      <a href="#directory" class="mobile-nav-link">Directory</a>
+      <a href="#about" class="mobile-nav-link">About</a>
+      <a href="ar.html" class="btn btn-primary mobile-cta">Launch AR</a>
+    </div>
+  </header>
+
+
+  <!-- ── HERO ───────────────────────────────────────────────── -->
+  <section class="hero" aria-label="Introduction">
+    <div class="container">
+      <div class="hero-grid">
+
+        <div class="hero-left">
+          <p class="super-label">Ayurvedic Anatomy Visualization</p>
+          <h1 class="hero-heading">
+            Biometrically Scaled AR Mapping of<br />
+            <em>107 Classical Marma Points.</em>
+          </h1>
+          <p class="hero-sub">
+            A real-time, browser-based tool for students and practitioners to explore the vital points defined in the
+            Sushruta Samhita, projected accurately onto the human body using live pose estimation.
+          </p>
+          <div class="hero-actions">
+            <a href="ar.html" class="btn btn-primary btn-lg">Open AR Camera</a>
+            <a href="#directory" class="btn btn-ghost btn-lg">Browse Directory</a>
+          </div>
+        </div>
+
+        <div class="hero-right" aria-label="Key statistics">
+          <div class="stat-block">
+            <span class="stat-number">107</span>
+            <span class="stat-label">Classical Marma Points</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-block">
+            <span class="stat-number">33</span>
+            <span class="stat-label">Pose Landmarks Tracked</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-block">
+            <span class="stat-number">4</span>
+            <span class="stat-label">Injury Severity Categories</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Risk category legend -->
+      <div class="hero-risk-bar">
+        <span class="risk-pill risk-sadya">Sadya - Immediately Fatal</span>
+        <span class="risk-pill risk-kalantara">Kalantara - Delayed Fatal</span>
+        <span class="risk-pill risk-vaikalya">Vaikalyakara - Disability</span>
+        <span class="risk-pill risk-rujak">Rujakara - Therapeutically Safe</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── SEARCH & FILTERS ────────────────────────────────────── -->
+  <section class="search-section" id="directory" aria-label="Search and filter">
+    <div class="container">
+
+      <div class="section-header">
+        <h2 class="section-heading">Marma Point Directory</h2>
+        <p class="section-sub">Search by name, region, or tissue type.</p>
+      </div>
+
+      <div class="search-wrapper" role="search">
+        <label for="marma-search" class="sr-only">Search Marma points</label>
+        <span class="search-icon" aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </span>
+        <input type="search" id="marma-search" class="search-input"
+          placeholder="Search by name, region, or tissue type…" autocomplete="off" spellcheck="false" />
+        <button class="search-clear" id="search-clear-btn" aria-label="Clear search" hidden>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Filter by body region">
+        <button class="filter-pill active" data-region="all" id="filter-all" aria-pressed="true">All Regions</button>
+        <button class="filter-pill" data-region="Head &amp; Neck" id="filter-head" aria-pressed="false">Head &amp;
+          Neck</button>
+        <button class="filter-pill" data-region="Trunk" id="filter-trunk" aria-pressed="false">Trunk</button>
+        <button class="filter-pill" data-region="Upper Extremities" id="filter-upper" aria-pressed="false">Upper
+          Extremities</button>
+        <button class="filter-pill" data-region="Lower Extremities" id="filter-lower" aria-pressed="false">Lower
+          Extremities</button>
+      </div>
+
+      <div class="safety-filter" role="group">
+        <label class="safety-toggle" for="safe-only-toggle">
+          <input type="checkbox" id="safe-only-toggle" />
+          <span class="safety-toggle-track" aria-hidden="true"></span>
+          Show therapeutically safe points only
+        </label>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── CARD GRID ───────────────────────────────────────────── -->
+  <main class="directory-section" aria-label="Marma point cards">
+    <div class="container">
+      <p class="results-count" id="results-count" aria-live="polite" aria-atomic="true">
+        Loading points…
+      </p>
+      <div class="card-grid" id="card-grid" role="list"></div>
+      <div class="empty-state" id="empty-state" hidden aria-live="polite">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          <line x1="8" y1="8" x2="14" y2="14" />
+          <line x1="14" y1="8" x2="8" y2="14" />
+        </svg>
+        <p class="empty-title">No points match your search</p>
+        <p class="empty-sub">Try a different name, region, or tissue type.</p>
+        <button class="btn btn-ghost" id="reset-btn">Clear Filters</button>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ── ABOUT (minimal) ────────────────────────────────────── -->
+  <section class="about-section" id="about" aria-label="About">
+    <div class="container">
+      <p class="super-label">About the Project</p>
+      <h2 class="section-heading">Integrating Classical Texts with Modern Tracking</h2>
+      <p class="about-body">
+        The Marma system, as documented in the <em>Sushruta Samhita</em>, describes 107 critical anatomical
+        intersections across the human body. This application brings that ancient topographical map into the modern era.
+        By leveraging localized MediaPipe tracking, MarmaAR dynamically scales each point to the individual user using
+        the traditional <em>Angula</em> biometric unit, ensuring high spatial accuracy for educational reference.
+      </p>
+      <ul class="feature-list" role="list">
+        <li class="feature-item"><span class="feature-dot"></span>Real-time 33-landmark pose estimation (MediaPipe)</li>
+        <li class="feature-item"><span class="feature-dot"></span>Dynamically scaled to your unique body proportions
+        </li>
+        <li class="feature-item"><span class="feature-dot"></span>4-tier injury severity classification</li>
+        <li class="feature-item"><span class="feature-dot"></span>Offline-capable PWA</li>
+        <li class="feature-item"><span class="feature-dot"></span>Auto front / back view detection</li>
+      </ul>
+    </div>
+  </section>
+
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo" aria-label="MarmaAR home">
+            <span class="logo-serif">Marma</span><span class="logo-sans">AR</span>
+          </a>
+          <p class="footer-tagline">Biometrically scaled AR mapping of 107 Ayurvedic vital points.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#directory" class="nav-link">Directory</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="ar.html" class="nav-link">Launch AR</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
