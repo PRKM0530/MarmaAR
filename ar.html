@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Marma AR">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Marma AR">
+  <meta name="theme-color" content="#FAF9F6">
+  <title>MarmaAR - AR Camera</title>
+
+  <!-- PWA manifest + icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <!-- Fonts - matches home page design system -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/ar.css">
+</head>
+
+<body>
+
+  <!-- ── Camera layer ─────────────────────────────────────────── -->
+  <video id="video" autoplay playsinline muted></video>
+  <canvas id="canvas"></canvas>
+  <!-- Invisible overlay that captures taps for Marma point selection -->
+  <div id="tap-layer"></div>
+
+  <!-- ── Top HUD ──────────────────────────────────────────────── -->
+  <!-- flex-wrap: badges flow to a second line on narrow screens   -->
+  <div id="hud-top">
+    <span id="hud-title">MarmaAR</span>
+    <span id="conf-badge" style="display:none;">LIVE</span>
+    <span id="orient-badge" style="display:none;">FRONT</span>
+    <span id="angula-badge">Angula -</span>
+    <span id="count-badge">- / 107</span>
+  </div>
+
+  <!-- ── Risk legend (bottom-left) ───────────────────────────── -->
+  <div id="legend">
+    <div class="leg">
+      <div class="leg-dot" style="background:#ff2d2d"></div><span class="leg-text">Sadya (Instant Fatal)</span>
+    </div>
+    <div class="leg">
+      <div class="leg-dot" style="background:#ff8c00"></div><span class="leg-text">Kalantara (Delayed Fatal)</span>
+    </div>
+    <div class="leg">
+      <div class="leg-dot" style="background:#e8e800"></div><span class="leg-text">Vaikalyakara (Disabling)</span>
+    </div>
+    <div class="leg">
+      <div class="leg-dot" style="background:#00e040"></div><span class="leg-text">Rujakara (Safe/Pain)</span>
+    </div>
+  </div>
+
+  <!-- ── Bottom controls ──────────────────────────────────────── -->
+  <!--
+    Layout (bottom to top):
+      Row A (primary, at very bottom):  Front | All | Back | Auto
+      Row B (utility, just above):      Labels …(space)… Flip
+    Primary view buttons are at the bottom edge - easiest thumb reach.
+    All buttons use data-action; no inline onclick anywhere.
+  -->
+  <div id="controls">
+
+    <!-- Row B: utility - Labels on left, Flip on right -->
+    <div class="ctrl-row-util">
+      <button id="lbl-btn" data-action="toggleLabels" title="Show / hide all point labels">
+        <!-- Eye icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        Labels
+      </button>
+
+      <button id="cam-btn" data-action="flipCamera" title="Switch between front and rear camera">
+        <!-- Flip icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="1 4 1 10 7 10" />
+          <polyline points="23 20 23 14 17 14" />
+          <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15" />
+        </svg>
+        Flip Camera
+      </button>
+    </div>
+
+    <!-- Row A: view selection - sits at the very bottom edge -->
+    <div class="ctrl-row">
+      <button class="view-btn" id="btn-front" data-action="setView" data-value="front">Front</button>
+      <button class="view-btn active" id="btn-all" data-action="setView" data-value="all">All</button>
+      <button class="view-btn" id="btn-back" data-action="setView" data-value="back">Back</button>
+      <!--
+        Auto: detects which way the person is facing and switches the view
+        automatically. While active, Front / All / Back are dimmed and
+        non-interactive (see .auto-active CSS). Tap Auto again to disable.
+      -->
+      <button class="view-btn" id="btn-auto" data-action="setView" data-value="auto">Auto</button>
+    </div>
+
+  </div><!-- #controls -->
+
+  <!-- ── No-body prompt ───────────────────────────────────────── -->
+  <div id="no-body">
+    <svg width="60" height="80" viewBox="0 0 60 80" fill="none" aria-hidden="true">
+      <circle cx="30" cy="12" r="10" stroke="white" stroke-width="2" />
+      <path d="M10 35 Q10 25 30 25 Q50 25 50 35 L50 65 Q50 70 45 70 L15 70 Q10 70 10 65 Z" stroke="white"
+        stroke-width="2" />
+      <line x1="10" y1="40" x2="0" y2="60" stroke="white" stroke-width="2" />
+      <line x1="50" y1="40" x2="60" y2="60" stroke="white" stroke-width="2" />
+      <line x1="20" y1="70" x2="18" y2="80" stroke="white" stroke-width="2" />
+      <line x1="40" y1="70" x2="42" y2="80" stroke="white" stroke-width="2" />
+    </svg>
+    <p>Point camera at a person</p>
+  </div>
+
+  <!-- ── Clinical info panel (slides up on point tap) ─────────── -->
+  <div id="info-panel" role="dialog" aria-label="Marma point detail">
+    <div id="panel-drag" data-action="closePanel">
+      <div id="panel-drag-handle"></div>
+    </div>
+    <div id="panel-inner">
+      <button id="panel-close" data-action="closePanel" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div id="panel-name">-</div>
+      <div id="panel-tags"></div>
+      <div id="panel-desc">-</div>
+    </div>
+  </div>
+
+  <!-- ── Loading / progress screen ───────────────────────────── -->
+  <div id="loading" role="status" aria-live="polite">
+    <div id="loading-logo">Preparing AR Environment</div>
+    <div class="spinner" aria-hidden="true"></div>
+    <div id="loading-text">MarmaAR</div>
+    <div id="loading-sub">Preparing pose model…</div>
+    <div class="load-bar-wrap">
+      <div class="load-bar" id="load-bar"></div>
+    </div>
+  </div>
+
+  <!-- Entry point - ES module (deferred by browser automatically) -->
+  <script type="module" src="js/ar.js"></script>
+
+</body>
+
+</html>
